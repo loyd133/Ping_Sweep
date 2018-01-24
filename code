@@ -1,0 +1,71 @@
+import os
+import platform
+import collections
+from datetime import datetime
+
+net = imput ("Please enter the netwok address:")
+net1 = net.split('.')
+a = '.'
+net2 = net1[0] + a + net1[1] + a + net1[2] + a
+st1 = int(input("enter the starting point:"))
+en1 = int(input("enter the ending point:"))
+
+dict = collections.OrderedDict()
+
+oper = platform.system()
+
+if( oper == "Windows"):
+	ping = "ping -n 1"
+
+elif( oper == "linux"):
+	ping1 = "ping -c 1"
+
+else:
+	ping1 = "ping -c 1"
+
+t1 = datetime.now()
+
+class myThread (threading.Thread):
+
+	def _init_(self, st, en):
+	threading.Thread._init_(self)
+	self.st = st
+	self.en = en
+
+   def run(self):
+   	self.run1(self, self.st ,self.en)
+
+   def run1(self, st, en)
+	for ip in range (st,en):
+
+		addr = net2+str(ip)
+		comm = ping1 + addr
+		responce = os.popen(comm)
+		for line in responce.readlines():
+		   if ("TTL" in line):
+			dict[ip]=addr
+
+total_ip = en1 - st1
+tn = 20  #number of ip per thread
+total_thread = total_ip / tn
+
+threads = []
+
+try:
+	for i in range(total_thread):
+	en = st1 + tn
+	if (en > en1):
+	en = en1
+	thread = myThread(st1,en)
+	thread.start()
+	threads.append(thread)
+	st1=en
+except:
+	print("unable to start the thread")
+
+
+print ("number of actve threads:", threading.activeCount())
+
+for t in threads:
+	t.join() #do not continue until all the the threads are done
+
